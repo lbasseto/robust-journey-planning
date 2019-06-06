@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div id="app">
+
+{% block header %}
+<div class="header">
+    <h1>Robust Journey Planning - Lab in Pseudo-Data Science</h1>
+      <h4 id="tagline">Louis Basseto, Kyle Gerard, Frank Schmutz</h4>
+    <div id="info">
+        <p>Blablabla good journey planner blablabla</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    <label for="departure_station">From: </label>
+    <select id="departure_station" name="departure_station" value="{{ request.form['departure_station'] }}">
+        {% for station in stations %}
+            <option value="{{ station }}">{{ station }}</option>
+        {% endfor %}
+    </select>
+     <label for="arrival_station">To: </label>
+    <select id="arrival_station" name="arrival_station" value="{{ request.form['arrival_station'] }}">
+        {% for station in stations %}
+            <option value="{{ station }}">{{ station }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="startDateTime">Depart at: </label>
+    <input  id="startDateTime" type="datetime-local" name="startDateTime" value="{{ request.form['startDateTime'] }}">
+    <label for="endDateTime">OR arrive before: </label>
+    <input  id="endDateTime" type="datetime-local" name="endDateTime" value="{{ request.form['endDateTime'] }}">
+    <br>
+    <label for="min_probability_of_sucess">Minimum probability of success: </label>
+    <input type="number" id="min_probability_of_sucess" name="min_probability_of_sucess" min="0" max="100" value="{{ request.form['min_probability_of_sucess'] }}">
+   <br>
+  <input type="submit" value="Search">
+</form>
+{% endblock %}
+
+{% include 'zurich_map_blank.html' %}
+
+</div>
