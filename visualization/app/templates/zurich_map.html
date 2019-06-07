@@ -15,7 +15,7 @@
     <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
     <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
     
-    <style>#map_ed94df60d6cb4cbe81fa3f6cac136124 {
+    <style>#map_e84d770c88af43b48f3b935f93f524de {
         position: relative;
         width: 75.0%;
         height: 75.0%;
@@ -26,7 +26,7 @@
 </head>
 <body>    
     
-    <div class="folium-map" id="map_ed94df60d6cb4cbe81fa3f6cac136124" ></div>
+    <div class="folium-map" id="map_e84d770c88af43b48f3b935f93f524de" ></div>
 </body>
 <script>    
     
@@ -34,8 +34,8 @@
         var bounds = null;
     
 
-    var map_ed94df60d6cb4cbe81fa3f6cac136124 = L.map(
-        'map_ed94df60d6cb4cbe81fa3f6cac136124', {
+    var map_e84d770c88af43b48f3b935f93f524de = L.map(
+        'map_e84d770c88af43b48f3b935f93f524de', {
         center: [47.376846, 8.543938],
         zoom: 11,
         maxBounds: bounds,
@@ -47,7 +47,7 @@
 
     
     
-    var tile_layer_9f6a2d9658644782ad6c3cd9fbb669ef = L.tileLayer(
+    var tile_layer_f13627cf19ed4a9990e6c5efd32face8 = L.tileLayer(
         'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
         {
         "attribution": null,
@@ -57,32 +57,58 @@
         "minZoom": 11,
         "noWrap": false,
         "subdomains": "abc"
-}).addTo(map_ed94df60d6cb4cbe81fa3f6cac136124);
+}).addTo(map_e84d770c88af43b48f3b935f93f524de);
     
-        var marker_fa205545f3ab4cbca8ac661913a2186d = L.marker(
+        var marker_bd0898d9298d443eb9ede94844b72df3 = L.marker(
             [47.32442800000001, 8.547999],
             {
                 icon: new L.Icon.Default()
                 }
-            ).addTo(map_ed94df60d6cb4cbe81fa3f6cac136124);
+            ).addTo(map_e84d770c88af43b48f3b935f93f524de);
         
     
-        marker_fa205545f3ab4cbca8ac661913a2186d.bindTooltip(
+
+                var icon_12383dc25baf4fbf9f1e92b32a999d58 = L.AwesomeMarkers.icon({
+                    icon: 'info-sign',
+                    iconColor: 'white',
+                    markerColor: 'green',
+                    prefix: 'glyphicon',
+                    extraClasses: 'fa-rotate-0'
+                    });
+                marker_bd0898d9298d443eb9ede94844b72df3.setIcon(icon_12383dc25baf4fbf9f1e92b32a999d58);
+            
+    
+            var popup_5b436a1a6483434da987cad02c35165e = L.popup({maxWidth: '300'
+            
+            });
+
+            
+                var html_8efdf61e984a4bd98cdacaca4e15d372 = $('<div id="html_8efdf61e984a4bd98cdacaca4e15d372" style="width: 100.0%; height: 100.0%;">Zug S24: 18:26:00 Kilchberg -> 18:39:00 Zürich HB</div>')[0];
+                popup_5b436a1a6483434da987cad02c35165e.setContent(html_8efdf61e984a4bd98cdacaca4e15d372);
+            
+
+            marker_bd0898d9298d443eb9ede94844b72df3.bindPopup(popup_5b436a1a6483434da987cad02c35165e)
+            ;
+
+            
+        
+    
+        marker_bd0898d9298d443eb9ede94844b72df3.bindTooltip(
             '<div>'
             + 'Kilchberg' + '</div>',
             {"sticky": true}
         );
         
     
-                var poly_line_bc300945d18a4a63b6c622cbaffc17dc = L.polyline(
-                    [[47.32442800000001, 8.547999], [47.412717, 8.591911]],
+                var poly_line_c449fcae98744eae8af8aa4d01fff033 = L.polyline(
+                    [[47.32442800000001, 8.547999], [47.378177, 8.540192]],
                     {
   "bubblingMouseEvents": true,
-  "color": "red",
+  "color": "blue",
   "dashArray": null,
   "dashOffset": null,
   "fill": false,
-  "fillColor": "red",
+  "fillColor": "blue",
   "fillOpacity": 0.2,
   "fillRule": "evenodd",
   "lineCap": "round",
@@ -94,33 +120,48 @@
   "weight": 2.5
 }
                     )
-                    .addTo(map_ed94df60d6cb4cbe81fa3f6cac136124);
+                    .addTo(map_e84d770c88af43b48f3b935f93f524de);
             
     
-        var marker_c7dd80ee978a4b74b84f7afa84926623 = L.marker(
-            [47.412717, 8.591911],
+        var marker_637802fdbb1240fa822af0dac187a160 = L.marker(
+            [47.378177, 8.540192],
             {
                 icon: new L.Icon.Default()
                 }
-            ).addTo(map_ed94df60d6cb4cbe81fa3f6cac136124);
+            ).addTo(map_e84d770c88af43b48f3b935f93f524de);
         
     
-        marker_c7dd80ee978a4b74b84f7afa84926623.bindTooltip(
+            var popup_34cc8b34c9d84a2db4acf85925142a7a = L.popup({maxWidth: '300'
+            
+            });
+
+            
+                var html_fcc83c26706d4afaa31cd7b2df070b8f = $('<div id="html_fcc83c26706d4afaa31cd7b2df070b8f" style="width: 100.0%; height: 100.0%;">Zug S12: 18:44:00 Zürich HB -> 18:55:00 Glanzenberg</div>')[0];
+                popup_34cc8b34c9d84a2db4acf85925142a7a.setContent(html_fcc83c26706d4afaa31cd7b2df070b8f);
+            
+
+            marker_637802fdbb1240fa822af0dac187a160.bindPopup(popup_34cc8b34c9d84a2db4acf85925142a7a)
+            ;
+
+            
+        
+    
+        marker_637802fdbb1240fa822af0dac187a160.bindTooltip(
             '<div>'
-            + 'Wallisellen' + '</div>',
+            + 'Zürich HB' + '</div>',
             {"sticky": true}
         );
         
     
-                var poly_line_d843a10a7411440abf80e010fd229530 = L.polyline(
-                    [[47.412717, 8.591911], [47.390882, 8.434713]],
+                var poly_line_4e68be4808a5415fa885b50ba9af3906 = L.polyline(
+                    [[47.378177, 8.540192], [47.398875, 8.420423]],
                     {
   "bubblingMouseEvents": true,
-  "color": "red",
+  "color": "blue",
   "dashArray": null,
   "dashOffset": null,
   "fill": false,
-  "fillColor": "red",
+  "fillColor": "blue",
   "fillOpacity": 0.2,
   "fillRule": "evenodd",
   "lineCap": "round",
@@ -132,33 +173,48 @@
   "weight": 2.5
 }
                     )
-                    .addTo(map_ed94df60d6cb4cbe81fa3f6cac136124);
+                    .addTo(map_e84d770c88af43b48f3b935f93f524de);
             
     
-        var marker_7eafee2177654206ab6f06c28cc6ff16 = L.marker(
-            [47.390882, 8.434713],
+        var marker_8989d462645645acaef249d49a9d6303 = L.marker(
+            [47.398875, 8.420423],
             {
                 icon: new L.Icon.Default()
                 }
-            ).addTo(map_ed94df60d6cb4cbe81fa3f6cac136124);
+            ).addTo(map_e84d770c88af43b48f3b935f93f524de);
         
     
-        marker_7eafee2177654206ab6f06c28cc6ff16.bindTooltip(
+            var popup_eb1549498a2a45f7868481c9b3da7d7a = L.popup({maxWidth: '300'
+            
+            });
+
+            
+                var html_c4155134c24344898310da3d68916f4c = $('<div id="html_c4155134c24344898310da3d68916f4c" style="width: 100.0%; height: 100.0%;">Walk: 18:55:00 Glanzenberg -> 19:06:00 Urdorf, Schlierenstrasse</div>')[0];
+                popup_eb1549498a2a45f7868481c9b3da7d7a.setContent(html_c4155134c24344898310da3d68916f4c);
+            
+
+            marker_8989d462645645acaef249d49a9d6303.bindPopup(popup_eb1549498a2a45f7868481c9b3da7d7a)
+            ;
+
+            
+        
+    
+        marker_8989d462645645acaef249d49a9d6303.bindTooltip(
             '<div>'
-            + 'Urdorf' + '</div>',
+            + 'Glanzenberg' + '</div>',
             {"sticky": true}
         );
         
     
-                var poly_line_84c93a80d8134c14b9aedca32ee7fe95 = L.polyline(
-                    [[47.390882, 8.434713], [47.391161, 8.423155]],
+                var poly_line_f79a433b434348f789b7c92155191f70 = L.polyline(
+                    [[47.398875, 8.420423], [47.391161, 8.423155]],
                     {
   "bubblingMouseEvents": true,
-  "color": "red",
+  "color": "blue",
   "dashArray": null,
   "dashOffset": null,
   "fill": false,
-  "fillColor": "red",
+  "fillColor": "blue",
   "fillOpacity": 0.2,
   "fillRule": "evenodd",
   "lineCap": "round",
@@ -170,29 +226,29 @@
   "weight": 2.5
 }
                     )
-                    .addTo(map_ed94df60d6cb4cbe81fa3f6cac136124);
+                    .addTo(map_e84d770c88af43b48f3b935f93f524de);
             
     
-        var marker_8374225f160443ccad843ce4a524687d = L.marker(
+        var marker_6bbf258b3b5e452caddf95e70c8fe4aa = L.marker(
             [47.391161, 8.423155],
             {
                 icon: new L.Icon.Default()
                 }
-            ).addTo(map_ed94df60d6cb4cbe81fa3f6cac136124);
+            ).addTo(map_e84d770c88af43b48f3b935f93f524de);
         
     
 
-                var icon_578c551821c34a3c9e76edfda96f5ddf = L.AwesomeMarkers.icon({
+                var icon_5671587f87684c289d461dc11a2b090a = L.AwesomeMarkers.icon({
                     icon: 'info-sign',
                     iconColor: 'white',
                     markerColor: 'red',
                     prefix: 'glyphicon',
                     extraClasses: 'fa-rotate-0'
                     });
-                marker_8374225f160443ccad843ce4a524687d.setIcon(icon_578c551821c34a3c9e76edfda96f5ddf);
+                marker_6bbf258b3b5e452caddf95e70c8fe4aa.setIcon(icon_5671587f87684c289d461dc11a2b090a);
             
     
-        marker_8374225f160443ccad843ce4a524687d.bindTooltip(
+        marker_6bbf258b3b5e452caddf95e70c8fe4aa.bindTooltip(
             '<div>'
             + 'Urdorf, Schlierenstrasse' + '</div>',
             {"sticky": true}

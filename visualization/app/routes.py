@@ -16,14 +16,14 @@ def homepage():
         endDateTime = request.form['endDateTime']
         min_probability_of_sucess = request.form['min_probability_of_sucess']
 
-        find_path_and_save_map(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess)
+        trip_result = find_path_and_save_map(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess)
 
-        return redirect(url_for('index.plot_trip'))
+        return redirect(url_for('index.plot_trip', trip_result = trip_result))
 
 @bp.route('/plot_trip', methods=('GET', 'POST'))
 def plot_trip():
     if request.method == 'GET':
-        return render_template('plot_trip.html', stations = station_list)
+        return render_template('plot_trip.html', stations = station_list, trip_result = request.args['trip_result'])
     elif request.method == 'POST':
         departure_station = request.form['departure_station']
         arrival_station = request.form['arrival_station']

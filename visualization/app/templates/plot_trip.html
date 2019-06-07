@@ -3,10 +3,12 @@
 
 {% block header %}
 <div class="header">
-    <h1>Robust Journey Planning - Lab in Pseudo-Data Science</h1>
+    <h1>Robust Journey Planning - Lab in Data Science</h1>
       <h4 id="tagline">Louis Basseto, Kyle Gerard, Frank Schmutz</h4>
     <div id="info">
-        <p>Blablabla good journey planner blablabla</p>
+        <p>Given a desired departure, or arrival time, our route planner will
+          compute the fastest route between two stops within a provided uncertainty
+          tolerance. It was built using CFF data.</p>
     </div>
 </div>
 {% endblock %}
@@ -36,6 +38,7 @@
    <br>
   <input type="submit" value="Search">
 </form>
+<p>{{ trip_result }}</p>
 {% endblock %}
 
 {% include 'zurich_map.html' %}
