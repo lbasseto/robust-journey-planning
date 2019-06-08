@@ -3,7 +3,6 @@ from . import routes
 import pyspark
 from pyspark.sql import SparkSession
 import pyspark.sql.functions as functions
-from graphframes import *
 
 spark = SparkSession \
     .builder \
@@ -14,6 +13,8 @@ spark = SparkSession \
     .config('spark.executor.instances', '5') \
     .config('spark.port.maxRetries', '100') \
     .getOrCreate()
+
+from graphframes import *
 
 vertices = spark.read.parquet('/homes/schmutz/vertices')
 
