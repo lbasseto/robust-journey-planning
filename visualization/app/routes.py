@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from source.constants import station_list
+import datetime
+from datetime import datetime
 from source.find_path import find_path_and_save_map
 
 
@@ -12,8 +14,8 @@ def homepage():
     elif request.method == 'POST':
         departure_station = request.form['departure_station']
         arrival_station = request.form['arrival_station']
-        startDateTime = request.form['startDateTime']
-        endDateTime = request.form['endDateTime']
+        startDateTime = datetime.strptime(request.form['startDateTime'], '%Y-%m-%dT%H:%M')
+        endDateTime = datetime.strptime(request.form['endDateTime'], '%Y-%m-%dT%H:%M')
         min_probability_of_sucess = request.form['min_probability_of_sucess']
 
         print(departure_station)
