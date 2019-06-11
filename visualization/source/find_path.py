@@ -1,7 +1,6 @@
 import folium
 import pandas as pd
 from . import __init__
-from __init__ import plan
 import datetime as dt
 import calendar
 import time
