@@ -1,18 +1,7 @@
 import folium
 import pandas as pd
-from . import __init__
-import datetime as dt
-import calendar
-import time
-import numpy as np
-import scipy.stats as stat
-import pyspark.sql.functions as functions
-import math
-import getpass
-import pyspark
+from app.__init__ import *
 from datetime import datetime, date, timedelta
-from pyspark.sql import SparkSession
-import networkx as nx
 
 def find_path_and_save_map(departure_station, arrival_station,
  startDateTime=None,
