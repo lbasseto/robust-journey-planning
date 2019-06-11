@@ -7,14 +7,10 @@ def find_path_and_save_map(departure_station, arrival_station,
  startDateTime=None,
  endDateTime=None,
  min_probability_of_sucess=0.0):
-    # Maximize departure time
-    fromStation = 'Kilchberg'
-    toStation   = 'Urdorf, Schlierenstrasse'
-    endDateTime   = datetime(2019, 6, 4, 19, 57)
 
-    res = plan(fromStation, toStation,
+    res = plan(departure_station, arrival_station,
            end_datetime=endDateTime,
-           min_probability_of_success=0.95)
+           min_probability_of_success=min_probability_of_sucess)
 
     # Minimize arrival time
     #startDateTime = datetime(2017, 9, 13, 12, 20)

@@ -16,6 +16,18 @@ def homepage():
         endDateTime = request.form['endDateTime']
         min_probability_of_sucess = request.form['min_probability_of_sucess']
 
+        print(departure_station)
+        print(arrival_station)
+        print(startDateTime)
+        print(endDateTime)
+        print(type(endDateTime))
+        print(min_probability_of_sucess)
+
+        # Maximize departure time
+        #fromStation = 'Kilchberg'
+        #toStation   = 'Urdorf, Schlierenstrasse'
+        #endDateTime   = datetime(2019, 6, 4, 19, 57)
+
         trip_result = find_path_and_save_map(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess)
 
         return redirect(url_for('index.plot_trip', trip_result = trip_result))
