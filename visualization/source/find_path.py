@@ -1,6 +1,7 @@
 import folium
 import pandas as pd
 from . import __init__
+from __init__ import plan
 import datetime as dt
 import calendar
 import time
@@ -18,28 +19,22 @@ def find_path_and_save_map(departure_station, arrival_station,
  startDateTime=None,
  endDateTime=None,
  min_probability_of_sucess=0.0):
+    # Maximize departure time
+    fromStation = 'Kilchberg'
+    toStation   = 'Urdorf, Schlierenstrasse'
+    endDateTime   = datetime(2019, 6, 4, 19, 57)
 
-    # TODO replace with real algo
-    res = {'arrival_time': '19:06:00',
- 'departure time': '18:26:00',
- 'duration': '00:40:00',
- 'path': [{'arrival_time': '18:39:00',
-   'departure_time': '18:26:00',
-   'dst': 'Zürich HB',
-   'line': 'S24',
-   'src': 'Kilchberg',
-   'type': 'Zug'},
-  {'arrival_time': '18:55:00',
-   'departure_time': '18:44:00',
-   'dst': 'Glanzenberg',
-   'line': 'S12',
-   'src': 'Zürich HB',
-   'type': 'Zug'},
-  {'arrival_time': '19:06:00',
-   'departure_time': '18:55:00',
-   'dst': 'Urdorf, Schlierenstrasse',
-   'src': 'Glanzenberg',
-   'type': 'walk'}]}
+    res = plan(fromStation, toStation,
+           end_datetime=endDateTime,
+           min_probability_of_success=0.95)
+
+    # Minimize arrival time
+    #startDateTime = datetime(2017, 9, 13, 12, 20)
+
+    #res = plan(fromStation, toStation, start_datetime=startDateTime, min_probability_of_success=0.95)
+
+    # How far can we go in M minutes example
+    #res = plan(fromStation, start_datetime=startDateTime, min_probability_of_success=0.95, heatmap=True, heatmap_duration=30)
 
     zurich_map = get_map_with_plot(res)
     zurich_map.save('./templates/zurich_map.html')

@@ -17,17 +17,20 @@ spark = SparkSession \
 
 from graphframes import *
 
+# Load data from hdfs
 vertices = spark.read.parquet('/homes/schmutz/vertices')
-
 edges = spark.read.parquet('/homes/schmutz/edges')
-
 graph = GraphFrame(vertices, edges)
 
+"""
+Define some constants
+"""
 MINUTES_PER_DAY = 1440
 MINUTES_PER_HOUR = 60
 SECONDS_PER_MINUTE = 60
 
 WALK_SPEED = 1000 * 5 / 60 # meters per minute
+
 
 def compute_length_in_minutes_between(departure, arrival):
     """
@@ -646,46 +649,76 @@ def dfs(subgraph, departure_station, arrival_station,
 
     if not paths:
         return {'departure time' : '', 'arrival_time' : '',
-                'duration' : '', 'path': []}
+                'duration' : '', 'probability' : 0.0, 'path': []}
 
     # Compute the departure / arrival time and duration of the possible trips
     if mode == 'arrival':
-        times = [compute_time_between(compute_dep_time(max_trip_arrival_time, path[:-2], None), path[-2]) for path in paths]
         dep_times = [compute_dep_time(max_trip_arrival_time, path[:-2], None) for path in paths]
+        best_indices = np.where(np.array(dep_times) == max(dep_times))[0]
     else:
-        times = [compute_time_between(path[-2], compute_arr_time(min_trip_departure_time, path[:-2], None)) for path in paths]
         arr_times = [compute_arr_time(min_trip_departure_time, path[:-2], None) for path in paths]
+        best_indices = np.where(np.array(arr_times) == min(arr_times))[0]
 
-    best_path_idx = np.argmax(dep_times) if mode == 'arrival' else np.argmin(arr_times)
-    best_path = paths[best_path_idx]
+    best_paths = []
+    durations = []
+    probabilities = []
 
-    path_edges = best_path[1:-2]
-    if mode == 'departure':
-        path_edges.reverse()
+    for idx in best_indices:
+        best_path = paths[idx]
 
-    # Compute the departure and arrival time for walk edges and remove unnecessary data
-    for idx, edge in enumerate(path_edges):
-        if edge['type'] == 'walk':
-            if idx == 0:
-                if len(path_edges) == 1:
-                    if mode == 'arrival':
-                        edge['arrival_time'] = max_trip_arrival_time
-                        edge['departure_time'] = sub_time(edge['arrival_time'], edge['lateAvg'])
+        path_edges = best_path[1:-2]
+        if mode == 'departure':
+            path_edges.reverse()
+
+        corrected_edges = []
+        # Compute the departure and arrival time for walk edges and remove unnecessary data
+        for idx, e in enumerate(path_edges):
+            edge = e.copy()
+
+            if edge['type'] == 'walk':
+                if idx == 0:
+                    if len(path_edges) == 1:
+                        if mode == 'arrival':
+                            edge['arrival_time'] = max_trip_arrival_time
+                            edge['departure_time'] = sub_time(edge['arrival_time'], edge['lateAvg'])
+                        else:
+                            edge['departure_time'] = min_trip_departure_time
+                            edge['arrival_time'] = add_time(edge['departure_time'], edge['lateAvg'])
                     else:
-                        edge['departure_time'] = min_trip_departure_time
-                        edge['arrival_time'] = add_time(edge['departure_time'], edge['lateAvg'])
+                        edge['arrival_time'] = path_edges[1]['departure_time']
+                        edge['departure_time'] = sub_time(edge['arrival_time'], edge['lateAvg'])
                 else:
-                    edge['arrival_time'] = path_edges[1]['departure_time']
-                    edge['departure_time'] = sub_time(edge['arrival_time'], edge['lateAvg'])
-            else:
-                edge['departure_time'] = path_edges[idx - 1]['arrival_time']
-                edge['arrival_time'] = add_time(edge['departure_time'], edge['lateAvg'])
+                    edge['departure_time'] = path_edges[idx - 1]['arrival_time']
+                    edge['arrival_time'] = add_time(edge['departure_time'], edge['lateAvg'])
 
-            edge.pop('line');
+                edge.pop('line');
 
-        edge.pop('departure_day');
-        edge.pop('lateAvg');
-        edge.pop('lateStd');
+            edge.pop('departure_day');
+            edge.pop('lateAvg');
+            edge.pop('lateStd');
+            corrected_edges.append(edge)
+
+
+        duration_time = compute_time_between(corrected_edges[0]['departure_time'], corrected_edges[-1]['arrival_time'])
+        probability = best_path[-1]
+
+        best_paths.append(corrected_edges)
+        durations.append(duration_time)
+        probabilities.append(probability)
+
+    # Pick the trips with the lowest duration among the remaining best trips
+    best_duration_indices = np.where(np.array(durations) == min(durations))[0]
+
+    best_duration_paths = [best_paths[idx] for idx in best_duration_indices]
+    best_duration_probs = [probabilities[idx] for idx in best_duration_indices]
+    best_duration = durations[best_duration_indices[0]]
+
+    # Pick the trip with the highest success probability among the remaining best trips
+    best_probability_index = np.argmax(best_duration_probs)
+
+    path_edges = best_duration_paths[best_probability_index]
+    best_probability = best_duration_probs[best_probability_index]
+
 
     # Remove prefix from the departure / arrival time
     for edge in path_edges:
@@ -695,8 +728,8 @@ def dfs(subgraph, departure_station, arrival_station,
     departure_time = path_edges[0]['departure_time']
     arrival_time = path_edges[-1]['arrival_time']
 
-    return {'departure time' : departure_time, 'arrival_time' : arrival_time,
-            'duration' : times[best_path_idx], 'path': path_edges}
+    return {'departure_time' : departure_time, 'arrival_time' : arrival_time,
+            'duration' : best_duration, 'probability': best_probability, 'path': path_edges}
 
 
 def plan(departure_station, arrival_station=None,
@@ -756,7 +789,7 @@ def plan(departure_station, arrival_station=None,
 
     def to_dt(time):
         """
-        Convert the time to a format useful for the implementation of the algorithm
+        Convert the time to a useful format for the implementation of the algorithm
         """
 
         if time == 'null':
