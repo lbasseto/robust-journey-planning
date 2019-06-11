@@ -26,7 +26,7 @@ def find_path_and_save_map(departure_station, arrival_station,
 
     zurich_map = get_map_with_plot(res)
     zurich_map.save('./templates/zurich_map.html')
-    return res['departure time'] + ' ' + res['path'][0]['src'] + ' -> ' + res['arrival_time'] + ' ' + res['path'][-1]['dst'] + ' - Duration: ' +  res['duration']
+    return res['departure_time'] + ' ' + res['path'][0]['src'] + ' -> ' + res['arrival_time'] + ' ' + res['path'][-1]['dst'] + ' - Duration: ' +  res['duration']
 
 def get_description(node):
     prefix = ''
