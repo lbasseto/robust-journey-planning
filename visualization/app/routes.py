@@ -8,8 +8,11 @@ from source.find_path import find_path_and_save_map
 bp = Blueprint('index', __name__)
 
 def get_trip_for_raw_input(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration):
+
     if heatmap_duration == '':
         heatmap_duration = 0
+    else:
+        heatmap_duration = int(heatmap_duration)
 
     if min_probability_of_sucess == '':
         min_probability_of_sucess = 0.95
