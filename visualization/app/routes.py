@@ -16,9 +16,14 @@ def get_trip_for_raw_input(departure_station, arrival_station, startDateTime, en
     else:
         min_probability_of_sucess = float(min_probability_of_sucess)
 
-    if endDateTime != '':
+    if endDateTime == '':
+        endDateTime = None
+    else:
         endDateTime = datetime.strptime(endDateTime, '%Y-%m-%dT%H:%M')
-    elif startDateTime != '':
+
+    if startDateTime == '':
+        startDateTime = None
+    else:
         startDateTime = datetime.strptime(startDateTime, '%Y-%m-%dT%H:%M')
 
     trip_result = find_path_and_save_map(departure_station, arrival_station,
