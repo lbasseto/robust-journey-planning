@@ -17,7 +17,6 @@ import pyspark.sql.functions as functions
 import getpass
 from datetime import datetime, date, timedelta
 
-'''
 spark = SparkSession \
     .builder \
     .master("yarn") \
@@ -35,7 +34,6 @@ vertices = spark.read.parquet('/homes/schmutz/vertices')
 edges = spark.read.parquet('/homes/schmutz/edges')
 graph = GraphFrame(vertices, edges)
 
-'''
 """
 Define some constants
 """
