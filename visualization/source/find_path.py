@@ -21,9 +21,10 @@ def find_path_and_save_map(departure_station, arrival_station,
         #Minimizing the arrival time
         res = plan(departure_station, arrival_station, start_datetime=startDateTime,
         min_probability_of_success=min_probability_of_sucess)
+        print('heatmap_duration', heatmap_duration)
         if heatmap_duration != 0:
             heatmap_data = plan(departure_station, start_datetime=startDateTime,
-            min_probability_of_success=min_probability_of_sucess, heatmap = True, heatmap_duration=0)
+            min_probability_of_success=min_probability_of_sucess, heatmap = True, heatmap_duration=heatmap_duration)
 
     print(res)
 
