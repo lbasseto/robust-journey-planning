@@ -24,22 +24,7 @@ def homepage():
         elif startDateTime != '':
             startDateTime = datetime.strptime(startDateTime, '%Y-%m-%dT%H:%M')
 
-
-        print('FGHJK')
-        print(departure_station)
-        print(arrival_station)
-        print(startDateTime)
-        print(endDateTime)
-        print(min_probability_of_sucess)
-        print(heatmap_duration)
-        print('FGHJK')
-
-        # Maximize departure time
-        #fromStation = 'Kilchberg'
-        #toStation   = 'Urdorf, Schlierenstrasse'
-        #endDateTime   = datetime(2019, 6, 4, 19, 57)
-
-        trip_result = find_path_and_save_map(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess)
+        trip_result = find_path_and_save_map(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration)
 
         return redirect(url_for('index.plot_trip', trip_result = trip_result))
 

@@ -1,4 +1,5 @@
 import folium
+from folium.plugins import HeatMap
 import pandas as pd
 from app.__init__ import *
 from datetime import datetime, date, timedelta
@@ -6,21 +7,25 @@ from datetime import datetime, date, timedelta
 def find_path_and_save_map(departure_station, arrival_station,
  startDateTime=None,
  endDateTime=None,
- min_probability_of_sucess=0.0):
+ min_probability_of_sucess=0.95, heatmap_duration = 0):
 
-    res = plan(departure_station, arrival_station,
-           end_datetime=endDateTime,
-           min_probability_of_success=min_probability_of_sucess)
+    heatmap_data = None
+    res = None
 
-    # Minimize arrival time
-    #startDateTime = datetime(2017, 9, 13, 12, 20)
+    if endDateTime != None:
+        # If an end time is specified, we maximize the departure time
+        res = plan(departure_station, arrival_station,
+               end_datetime=endDateTime,
+               min_probability_of_success=min_probability_of_sucess)
+    else:
+        #Minimizing the arrival time
+        res = plan(departure_station, arrival_station, start_datetime=startDateTime,
+        min_probability_of_success=min_probability_of_sucess)
+        if heatmap_duration != 0:
+            heatmap_data = plan(departure_station, start_datetime=startDateTime,
+            min_probability_of_success=min_probability_of_sucess, heatmap = True, heatmap_duration=0)
 
-    #res = plan(fromStation, toStation, start_datetime=startDateTime, min_probability_of_success=0.95)
-
-    # How far can we go in M minutes example
-    #res = plan(fromStation, start_datetime=startDateTime, min_probability_of_success=0.95, heatmap=True, heatmap_duration=30)
-
-    zurich_map = get_map_with_plot(res)
+    zurich_map = get_map_with_plot(res, heatmap_data)
     zurich_map.save('./templates/zurich_map.html')
     return res['departure_time'] + ' ' + res['path'][0]['src'] + ' -> ' + res['arrival_time'] + ' ' + res['path'][-1]['dst'] + ' - Duration: ' +  res['duration']
 
@@ -32,11 +37,27 @@ def get_description(node):
         prefix = node['type'] + ' ' + node['line'] + ': '
     return prefix + node['departure_time'] + ' ' + node['src'] + ' -> ' + node['arrival_time'] + ' ' + node['dst']
 
-def get_map_with_plot(res):
+def get_map_with_plot(res, heatmap_data = None):
     m = zurich_map = folium.Map(location=[47.376846, 8.543938],
      zoom_control = False, min_zoom=11, max_zoom=11, zoom_start=11,
       tiles="cartodbpositron", width='75%', height='75%')
+
     stations = pd.read_pickle("../resources/stations.pkl")
+
+    if heatmap_data != None:
+        heatmap_list = []
+        for key, value in heatmap_data.items():
+            station = stations.loc[key]
+            folium.Circle(
+              location=[station['Latitude'], station['Longitude']],
+              radius=value,
+              color='green',
+              fill=True,
+              fill_color='green',
+              fill_opacity=0.07,
+              weight=0.1
+           ).add_to(m)
+
     trip = res['path']
     for idx, node in enumerate(trip):
         src_station = stations.loc[node['src']]
