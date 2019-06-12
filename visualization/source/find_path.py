@@ -25,6 +25,8 @@ def find_path_and_save_map(departure_station, arrival_station,
             heatmap_data = plan(departure_station, start_datetime=startDateTime,
             min_probability_of_success=min_probability_of_sucess, heatmap = True, heatmap_duration=0)
 
+    print(res)
+
     zurich_map = get_map_with_plot(res, heatmap_data)
     zurich_map.save('./templates/zurich_map.html')
     return res['departure_time'] + ' ' + res['path'][0]['src'] + ' -> ' + res['arrival_time'] + ' ' + res['path'][-1]['dst'] + ' - Duration: ' +  res['duration']
