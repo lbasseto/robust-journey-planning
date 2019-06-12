@@ -1,19 +1,14 @@
 from flask import Flask
 from . import routes
 
-import datetime as dt
 import calendar
 import time
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import scipy.stats as stat
-import math
 import networkx as nx
 
 import pyspark
 from pyspark.sql import SparkSession
-import pyspark.sql.functions as functions
 import getpass
 from datetime import datetime, date, timedelta
 
