@@ -17,13 +17,16 @@ def homepage():
         startDateTime = datetime.strptime(request.form['startDateTime'], '%Y-%m-%dT%H:%M')
         endDateTime = datetime.strptime(request.form['endDateTime'], '%Y-%m-%dT%H:%M')
         min_probability_of_sucess = request.form['min_probability_of_sucess']
+        heatmap_duration = request.form['heatmap_duration']
 
+        print('FGHJK')
         print(departure_station)
         print(arrival_station)
         print(startDateTime)
         print(endDateTime)
-        print(type(endDateTime))
         print(min_probability_of_sucess)
+        print(heatmap_duration)
+        print('FGHJK')
 
         # Maximize departure time
         #fromStation = 'Kilchberg'
