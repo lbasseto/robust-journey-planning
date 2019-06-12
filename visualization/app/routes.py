@@ -22,17 +22,28 @@ def homepage():
         if heatmap_duration == '':
             heatmap_duration = 0
 
+        print('aaaaaaaaaa')
+        print(min_probability_of_sucess)
+        print(type(min_probability_of_sucess))
+
         if min_probability_of_sucess == '':
             min_probability_of_sucess = 0.95
         else:
             min_probability_of_sucess = float(min_probability_of_sucess)
+
+        print('bbbbbbbbbbb')
+        print(min_probability_of_sucess)
+        print(type(min_probability_of_sucess))
 
         if endDateTime != '':
             endDateTime = datetime.strptime(endDateTime, '%Y-%m-%dT%H:%M')
         elif startDateTime != '':
             startDateTime = datetime.strptime(startDateTime, '%Y-%m-%dT%H:%M')
 
-        trip_result = find_path_and_save_map(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration)
+        trip_result = find_path_and_save_map(departure_station, arrival_station,
+         startDateTime=startDateTime, endDateTime=endDateTime,
+         min_probability_of_sucess=min_probability_of_sucess,
+         heatmap_duration=heatmap_duration)
 
         return redirect(url_for('index.plot_trip', trip_result = trip_result))
 
