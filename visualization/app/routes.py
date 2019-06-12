@@ -14,10 +14,16 @@ def homepage():
     elif request.method == 'POST':
         departure_station = request.form['departure_station']
         arrival_station = request.form['arrival_station']
-        startDateTime = datetime.strptime(request.form['startDateTime'], '%Y-%m-%dT%H:%M')
-        endDateTime = datetime.strptime(request.form['endDateTime'], '%Y-%m-%dT%H:%M')
-        min_probability_of_sucess = request.form['min_probability_of_sucess']
-        heatmap_duration = request.form['heatmap_duration']
+        startDateTime = request.form['startDateTime']
+        endDateTime = request.form['endDateTime']
+        min_probability_of_sucess = float(request.form['min_probability_of_sucess'])
+        heatmap_duration = int(request.form['heatmap_duration'])
+
+        if endDateTime != '':
+            endDateTime = datetime.strptime(endDateTime, '%Y-%m-%dT%H:%M')
+        elif startDateTime != '':
+            startDateTime = datetime.strptime(startDateTime, '%Y-%m-%dT%H:%M')
+
 
         print('FGHJK')
         print(departure_station)
