@@ -55,6 +55,7 @@ def plot_trip():
         startDateTime = request.form['startDateTime']
         endDateTime = request.form['endDateTime']
         min_probability_of_sucess = request.form['min_probability_of_sucess']
+        heatmap_duration = request.form['heatmap_duration']
 
         trip_result = get_trip_for_raw_input(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration)
 
