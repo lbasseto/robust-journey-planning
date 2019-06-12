@@ -12,6 +12,9 @@ def find_path_and_save_map(departure_station, arrival_station,
     heatmap_data = None
     res = None
 
+    if departure_station == arrival_station:
+        return "Please try again. You selected identical departure and arrival points."
+
     if endDateTime != None:
         # If an end time is specified, we maximize the departure time
         res = plan(departure_station, arrival_station,
@@ -21,18 +24,17 @@ def find_path_and_save_map(departure_station, arrival_station,
         #Minimizing the arrival time
         res = plan(departure_station, arrival_station, start_datetime=startDateTime,
         min_probability_of_success=min_probability_of_sucess)
-        print('heatmap_duration', heatmap_duration)
         if heatmap_duration != 0:
             heatmap_data = plan(departure_station, start_datetime=startDateTime,
             min_probability_of_success=min_probability_of_sucess, heatmap = True, heatmap_duration=heatmap_duration)
 
-    print(res)
+    print('query result', res)
 
     zurich_map = get_map_with_plot(res, heatmap_data)
     zurich_map.save('./templates/zurich_map.html')
 
     if not res['path']:
-        return "No trip is available for this query."
+        return "The shortest route is to walk in this case."
     else:
         return res['departure_time'] + ' ' + res['path'][0]['src'] + ' -> ' + res['arrival_time'] + ' ' + res['path'][-1]['dst'] + ' - Duration: ' +  res['duration']
 
