@@ -29,6 +29,8 @@ def find_path_and_save_map(departure_station, arrival_station,
 
     zurich_map = get_map_with_plot(res, heatmap_data)
     zurich_map.save('./templates/zurich_map.html')
+
+    if res['path'] = []:
     return res['departure_time'] + ' ' + res['path'][0]['src'] + ' -> ' + res['arrival_time'] + ' ' + res['path'][-1]['dst'] + ' - Duration: ' +  res['duration']
 
 def get_description(node):
@@ -41,7 +43,7 @@ def get_description(node):
 
 def get_map_with_plot(res, heatmap_data = None):
     m = zurich_map = folium.Map(location=[47.376846, 8.543938],
-     zoom_control = False, min_zoom=11, max_zoom=11, zoom_start=11,
+     zoom_control = True, min_zoom=10, zoom_start=11,
       tiles="cartodbpositron", width='75%', height='75%')
 
     stations = pd.read_pickle("../resources/stations.pkl")
