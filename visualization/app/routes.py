@@ -49,8 +49,10 @@ def homepage():
         min_probability_of_sucess = request.form['min_probability_of_sucess']
         heatmap_duration = request.form['heatmap_duration']
 
-        trip_result = get_trip_for_raw_input(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration)
+        if departure_station == arrival_station:
+            return redirect(url_for('index.homepage'))
 
+        trip_result = get_trip_for_raw_input(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration)
         return redirect(url_for('index.plot_trip', trip_result = trip_result))
 
 @bp.route('/plot_trip', methods=('GET', 'POST'))

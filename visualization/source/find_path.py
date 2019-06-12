@@ -12,9 +12,6 @@ def find_path_and_save_map(departure_station, arrival_station,
     heatmap_data = None
     res = None
 
-    if departure_station == arrival_station:
-        return "Please try again. You selected identical departure and arrival points."
-
     if endDateTime != None:
         # If an end time is specified, we maximize the departure time
         res = plan(departure_station, arrival_station,
