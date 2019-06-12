@@ -17,7 +17,10 @@ def homepage():
         startDateTime = request.form['startDateTime']
         endDateTime = request.form['endDateTime']
         min_probability_of_sucess = float(request.form['min_probability_of_sucess'])
-        heatmap_duration = int(request.form['heatmap_duration'])
+        heatmap_duration = request.form['heatmap_duration']
+
+        if heatmap_duration == '':
+            heatmap_duration = 0
 
         if endDateTime != '':
             endDateTime = datetime.strptime(endDateTime, '%Y-%m-%dT%H:%M')
