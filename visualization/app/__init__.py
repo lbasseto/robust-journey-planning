@@ -12,8 +12,6 @@ from pyspark.sql import SparkSession
 import getpass
 from datetime import datetime, date, timedelta
 
-print('   HERE   dnovbeifbviefjvbeibfvieufbvieufbieubvieufbvie')
-
 spark = SparkSession \
     .builder \
     .master("yarn") \

@@ -30,8 +30,10 @@ def find_path_and_save_map(departure_station, arrival_station,
     zurich_map = get_map_with_plot(res, heatmap_data)
     zurich_map.save('./templates/zurich_map.html')
 
-    if res['path'] = []:
-    return res['departure_time'] + ' ' + res['path'][0]['src'] + ' -> ' + res['arrival_time'] + ' ' + res['path'][-1]['dst'] + ' - Duration: ' +  res['duration']
+    if not res['path']:
+        return "No trip is available for this query."
+    else:
+        return res['departure_time'] + ' ' + res['path'][0]['src'] + ' -> ' + res['arrival_time'] + ' ' + res['path'][-1]['dst'] + ' - Duration: ' +  res['duration']
 
 def get_description(node):
     prefix = ''
