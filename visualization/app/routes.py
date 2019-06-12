@@ -16,11 +16,16 @@ def homepage():
         arrival_station = request.form['arrival_station']
         startDateTime = request.form['startDateTime']
         endDateTime = request.form['endDateTime']
-        min_probability_of_sucess = float(request.form['min_probability_of_sucess'])
+        min_probability_of_sucess = request.form['min_probability_of_sucess']
         heatmap_duration = request.form['heatmap_duration']
 
         if heatmap_duration == '':
             heatmap_duration = 0
+
+        if min_probability_of_sucess == '':
+            min_probability_of_sucess = 0.95
+        else:
+            min_probability_of_sucess = float(min_probability_of_sucess)
 
         if endDateTime != '':
             endDateTime = datetime.strptime(endDateTime, '%Y-%m-%dT%H:%M')
