@@ -7,7 +7,7 @@ from source.find_path import find_path_and_save_map
 
 bp = Blueprint('index', __name__)
 
-def get_trip_for_raw_input(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration):
+def get_trip_for_raw_input(departure_station, arrival_station, dep_or_arr, input_datetime, min_probability_of_sucess, heatmap_duration):
 
     if heatmap_duration == '':
         heatmap_duration = 0
@@ -19,15 +19,12 @@ def get_trip_for_raw_input(departure_station, arrival_station, startDateTime, en
     else:
         min_probability_of_sucess = float(min_probability_of_sucess)
 
-    if endDateTime == '':
+    if dep_or_arr == 'dep':
+        startDateTime = datetime.strptime(input_datetime, '%Y-%m-%dT%H:%M')
         endDateTime = None
     else:
-        endDateTime = datetime.strptime(endDateTime, '%Y-%m-%dT%H:%M')
-
-    if startDateTime == '':
         startDateTime = None
-    else:
-        startDateTime = datetime.strptime(startDateTime, '%Y-%m-%dT%H:%M')
+        endDateTime = datetime.strptime(input_datetime, '%Y-%m-%dT%H:%M')
 
     trip_result = find_path_and_save_map(departure_station, arrival_station,
      startDateTime=startDateTime, endDateTime=endDateTime,
@@ -44,15 +41,15 @@ def homepage():
     elif request.method == 'POST':
         departure_station = request.form['departure_station']
         arrival_station = request.form['arrival_station']
-        startDateTime = request.form['startDateTime']
-        endDateTime = request.form['endDateTime']
+        dep_or_arr = request.form['dep_or_arr']
+        input_datetime = request.form['input_datetime']
         min_probability_of_sucess = request.form['min_probability_of_sucess']
         heatmap_duration = request.form['heatmap_duration']
 
         if departure_station == arrival_station:
             return redirect(url_for('index.homepage'))
 
-        trip_result = get_trip_for_raw_input(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration)
+        trip_result = get_trip_for_raw_input(departure_station, arrival_station, dep_or_arr, input_datetime, min_probability_of_sucess, heatmap_duration)
         return redirect(url_for('index.plot_trip', trip_result = trip_result))
 
 @bp.route('/plot_trip', methods=('GET', 'POST'))
@@ -62,11 +59,13 @@ def plot_trip():
     elif request.method == 'POST':
         departure_station = request.form['departure_station']
         arrival_station = request.form['arrival_station']
-        startDateTime = request.form['startDateTime']
-        endDateTime = request.form['endDateTime']
+        dep_or_arr = request.form['dep_or_arr']
+        input_datetime = request.form['input_datetime']
         min_probability_of_sucess = request.form['min_probability_of_sucess']
         heatmap_duration = request.form['heatmap_duration']
 
-        trip_result = get_trip_for_raw_input(departure_station, arrival_station, startDateTime, endDateTime, min_probability_of_sucess, heatmap_duration)
+        if departure_station == arrival_station:
+            return redirect(url_for('index.homepage'))
 
+        trip_result = get_trip_for_raw_input(departure_station, arrival_station, dep_or_arr, input_datetime, min_probability_of_sucess, heatmap_duration)
         return redirect(url_for('index.plot_trip', trip_result = trip_result))
