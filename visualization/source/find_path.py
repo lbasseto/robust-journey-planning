@@ -11,7 +11,7 @@ def find_path_and_save_map(departure_station, arrival_station,
 
     heatmap_data = None
     res = None
-
+    
     if endDateTime != None:
         # If an end time is specified, we maximize the departure time
         res = plan(departure_station, arrival_station,
@@ -26,7 +26,6 @@ def find_path_and_save_map(departure_station, arrival_station,
             min_probability_of_success=min_probability_of_sucess, heatmap = True, heatmap_duration=heatmap_duration)
 
     print('query result', res)
-
     zurich_map = get_map_with_plot(res, heatmap_data)
     zurich_map.save('./templates/zurich_map.html')
 
