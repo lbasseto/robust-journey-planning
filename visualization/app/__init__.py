@@ -36,6 +36,9 @@ MINUTES_PER_DAY = 1440
 MINUTES_PER_HOUR = 60
 SECONDS_PER_MINUTE = 60
 
+MAX_PATH_LENGTH = 10
+MAX_SEARCH_TIME = 60
+
 WALK_SPEED = 1000 * 5 / 60 # meters per minute
 
 
@@ -450,7 +453,7 @@ def compute_arr_time(min_dep_time, curr_path, edge=None):
 def compute_paths_arrival_mode(src, dst, subgraph, visited, curr_path,
                                curr_prob, curr_time, curr_lateAvg, curr_lateStd,
                                min_trip_departure_time, max_trip_arrival_time,
-                               paths, last_line_taken, time_limits, min_prob_success, best_times):
+                               paths, last_line_taken, time_limits, min_prob_success, best_times, max_search_time):
     """
     Use the depth first search algorithm on the subgraph to find the potential trips that depart the latest
     while still meeting the uncertainty requirement
@@ -471,6 +474,7 @@ def compute_paths_arrival_mode(src, dst, subgraph, visited, curr_path,
     min_prob_success is the uncertainty requirement we have to respect
     best_times is a dictionary containing a single entry where we store the latest departure time for which we can find a path
     that we currently know
+    max_search_time is the maximum computation time we're willing to spend on this query
     """
 
     visited.add(src)
@@ -488,7 +492,7 @@ def compute_paths_arrival_mode(src, dst, subgraph, visited, curr_path,
 
             paths.append(final_path)
 
-    else:
+    elif len(curr_path) < MAX_PATH_LENGTH and time.time() < max_search_time:
         vertice_edges = subgraph.out_edges(src, data=True)
         for vertice_edge in vertice_edges:
             edge = vertice_edge[2]
@@ -505,7 +509,7 @@ def compute_paths_arrival_mode(src, dst, subgraph, visited, curr_path,
                         compute_paths_arrival_mode(edge['dst'], dst, subgraph, visited, curr_path,
                                                    curr_prob, new_time, curr_lateAvg, curr_lateStd,
                                                    min_trip_departure_time, max_trip_arrival_time, paths,
-                                                   edge['line'], time_limits, min_prob_success, best_times)
+                                                   edge['line'], time_limits, min_prob_success, best_times, max_search_time)
                         curr_path.pop();
 
                 elif edge['departure_time'] > curr_time and edge['dst'] in time_limits and \
@@ -521,7 +525,7 @@ def compute_paths_arrival_mode(src, dst, subgraph, visited, curr_path,
                         compute_paths_arrival_mode(edge['dst'], dst, subgraph, visited, curr_path,
                                                    new_prob, edge['arrival_time'], edge['lateAvg'], edge['lateStd'],
                                                    min_trip_departure_time, max_trip_arrival_time, paths,
-                                                   edge['line'], time_limits, min_prob_success, best_times)
+                                                   edge['line'], time_limits, min_prob_success, best_times, max_search_time)
                         curr_path.pop();
 
     visited.remove(src)
@@ -530,7 +534,7 @@ def compute_paths_arrival_mode(src, dst, subgraph, visited, curr_path,
 def compute_paths_departure_mode(src, dst, subgraph, visited, curr_path,
                                  curr_prob, curr_time,
                                  min_trip_departure_time, max_trip_arrival_time,
-                                 paths, last_line_taken, time_limits, min_prob_success, best_times):
+                                 paths, last_line_taken, time_limits, min_prob_success, best_times, max_search_time):
     """
     Use the depth first search algorithm on the subgraph to find the potential trips that arrive the earliest
     while still meeting the uncertainty requirement. In this function we begin our search from the destination to the source.
@@ -550,6 +554,7 @@ def compute_paths_departure_mode(src, dst, subgraph, visited, curr_path,
     min_prob_success is the uncertainty requirement we have to respect
     best_times is a dictionary containing a single entry where we store the earliest arrival time for which we can find a path
     that we currently know
+    max_search_time is the maximum computation time we're willing to spend on this query
     """
 
     visited.add(dst)
@@ -565,7 +570,7 @@ def compute_paths_departure_mode(src, dst, subgraph, visited, curr_path,
 
         paths.append(final_path)
 
-    else:
+    elif len(curr_path) < MAX_PATH_LENGTH and time.time() < max_search_time:
         vertice_edges = subgraph.in_edges(dst, data=True)
         for vertice_edge in vertice_edges:
             edge = vertice_edge[2]
@@ -582,7 +587,7 @@ def compute_paths_departure_mode(src, dst, subgraph, visited, curr_path,
                         compute_paths_departure_mode(src, edge['src'], subgraph, visited, curr_path,
                                                      curr_prob, new_time,
                                                      min_trip_departure_time, max_trip_arrival_time, paths,
-                                                     edge['line'], time_limits, min_prob_success, best_times)
+                                                     edge['line'], time_limits, min_prob_success, best_times, max_search_time)
                         curr_path.pop();
 
                 elif edge['arrival_time'] < curr_time and edge['src'] in time_limits and \
@@ -598,7 +603,7 @@ def compute_paths_departure_mode(src, dst, subgraph, visited, curr_path,
                         compute_paths_departure_mode(src, edge['src'], subgraph, visited, curr_path,
                                                      new_prob, edge['departure_time'],
                                                      min_trip_departure_time, max_trip_arrival_time, paths,
-                                                     edge['line'], time_limits, min_prob_success, best_times)
+                                                     edge['line'], time_limits, min_prob_success, best_times, max_search_time)
                         curr_path.pop();
 
     visited.remove(dst)
@@ -642,21 +647,24 @@ def dfs(subgraph, departure_station, arrival_station,
     else:
         best_times = {'dep': min_trip_departure_time} if mode == 'arrival' else {'arr': max_trip_arrival_time}
 
+    max_search_time = time.time() + MAX_SEARCH_TIME
+
     # Compute the paths
     if mode == 'arrival':
         compute_paths_arrival_mode(departure_station, arrival_station, subgraph,
                                    visited, curr_path, 1.0, curr_time, 0.0, 0.0, min_trip_departure_time,
                                    max_trip_arrival_time, paths, '', time_limits,
-                                   min_probability_of_success, best_times)
+                                   min_probability_of_success, best_times, max_search_time)
     else:
         compute_paths_departure_mode(departure_station, arrival_station, subgraph,
                                      visited, curr_path, 1.0, curr_time, min_trip_departure_time,
                                      max_trip_arrival_time, paths, '', time_limits,
-                                     min_probability_of_success, best_times)
+                                     min_probability_of_success, best_times, max_search_time)
 
     if not paths:
         return {'departure time' : '', 'arrival_time' : '',
                 'duration' : '', 'probability' : 0.0, 'path': []}
+
 
     # Compute the departure / arrival time and duration of the possible trips
     if mode == 'arrival':
